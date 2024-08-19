@@ -51,7 +51,7 @@ class NewCarProvider extends StateNotifier<CarModel> {
     CustomDialogs.loading(message: 'Saving car .......');
     state = state.copyWith(
       status: 'available',
-      id: CarServices.getCarId(),
+      id: state.registrationNumber.trim(),
     );
     var result = await CarServices.addCar(state);
     if (result) {

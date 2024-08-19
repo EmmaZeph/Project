@@ -5,19 +5,19 @@ import 'package:fuel_management/core/views/custom_dialog.dart';
 import 'package:fuel_management/router/router.dart';
 import 'package:fuel_management/router/router_items.dart';
 
-class AdminLogin {
+class LoginModel {
   String id;
   String password;
-  AdminLogin({
+  LoginModel({
     required this.id,
     required this.password,
   });
 
-  AdminLogin copyWith({
+  LoginModel copyWith({
     String? id,
     String? password,
   }) {
-    return AdminLogin(
+    return LoginModel(
       id: id ?? this.id,
       password: password ?? this.password,
     );
@@ -25,11 +25,11 @@ class AdminLogin {
 }
 
 final adminLoginProvider =
-    StateNotifierProvider<AdminLoginProvider, AdminLogin>(
+    StateNotifierProvider<AdminLoginProvider, LoginModel>(
         (ref) => AdminLoginProvider());
 
-class AdminLoginProvider extends StateNotifier<AdminLogin> {
-  AdminLoginProvider() : super(AdminLogin(id: '', password: ''));
+class AdminLoginProvider extends StateNotifier<LoginModel> {
+  AdminLoginProvider() : super(LoginModel(id: '', password: ''));
 
   void setId(String id) {
     state = state.copyWith(id: id);

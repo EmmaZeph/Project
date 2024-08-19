@@ -82,4 +82,19 @@ class DriversServices {
       return '';
     }
   }
+
+  static Future<DriverModel?>getDriver({required String id, required String password}) async{
+    try {
+      var driver = await drivers.doc(id.trim()).get();
+      if(driver.exists){
+        var driverModel = DriverModel.fromMap(driver.data() as Map<String, dynamic>);
+        if(driverModel.password == password){
+          return driverModel;
+        }
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
 }

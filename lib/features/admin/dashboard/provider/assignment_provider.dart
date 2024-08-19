@@ -60,9 +60,21 @@ class AssignmentsProvider extends StateNotifier<AssignmentFilter> {
     CustomDialogs.dismiss();
     CustomDialogs.loading(message: 'Deleting assignment');
     var results = await AssignmentServices.deleteAssignment(assign.id);
-    if (results ) {
+    if (results) {
       CustomDialogs.dismiss();
-     
+    }
+  }
+
+  void updateTrip(AssignmentModel copyWith) async {
+    CustomDialogs.dismiss();
+    CustomDialogs.loading(message: 'Updating assignment');
+    var result = await AssignmentServices.updateAssignment(copyWith);
+    if (result) {
+      CustomDialogs.dismiss();
+      CustomDialogs.toast(message: 'Assignment updated',type: DialogType.success);
+    }else{
+      CustomDialogs.dismiss();
+      CustomDialogs.toast(message: 'Failed to update assignment');
     }
   }
 }

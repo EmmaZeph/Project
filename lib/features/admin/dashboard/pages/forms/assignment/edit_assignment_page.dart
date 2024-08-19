@@ -182,8 +182,10 @@ class _EditAssignmentPageState extends ConsumerState<EditAssignmentPage> {
                           builder: (context, controller, focusNode) {
                             //wait for build to complete
                             WidgetsBinding.instance.addPostFrameCallback((_) {
+                              var car = CarModel.fromMap(
+                                  ref.watch(editAssignmentProvider).car);
                               controller.text =
-                                  ref.watch(editAssignmentProvider).carId;
+                                  car.registrationNumber.isEmpty ? '' : car.registrationNumber;
                               //remove focus
                             });
                             return CustomTextFields(

@@ -171,8 +171,12 @@ class _NewAssignmentState extends ConsumerState<NewAssignment> {
                           builder: (context, controller, focusNode) {
                             //wait for build to complete
                             WidgetsBinding.instance.addPostFrameCallback((_) {
-                              controller.text =
-                                  ref.watch(newAssignmentProvider).carId;
+                               var car = CarModel.fromMap(
+                                  ref.watch(newAssignmentProvider).car);
+                              controller.text = car.registrationNumber.isEmpty
+                                  ? ''
+                                  : car.registrationNumber;
+                              //remove focus
                               //remove focus
                             });
                             return CustomTextFields(
