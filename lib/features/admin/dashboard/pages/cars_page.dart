@@ -81,12 +81,13 @@ class _CarsPageState extends ConsumerState<CarsPage> {
             child: DataTable2(
               columnSpacing: 30,
               horizontalMargin: 12,
+              isHorizontalScrollBarVisible: true,
               empty: Center(
                   child: Text(
                 'No Cars found',
                 style: rowStyles,
               )),
-              minWidth: styles.width * .8,
+              minWidth: 1200,
               headingRowColor: WidgetStateColor.resolveWith(
                   (states) => primaryColor.withOpacity(0.6)),
               headingTextStyle: titleStyles,
@@ -182,7 +183,9 @@ class _CarsPageState extends ConsumerState<CarsPage> {
                               ref.read(editCarProvider.notifier).setCar(car);
                               if (ref.watch(editCarProvider).id.isNotEmpty) {
                                 MyRouter(context: context, ref: ref)
-                                    .navigateToNamed(pathPrams: {'id':car.id}, item: RouterItem.editCarRoute);
+                                    .navigateToNamed(
+                                        pathPrams: {'id': car.id},
+                                        item: RouterItem.editCarRoute);
                               }
                             },
                           ),

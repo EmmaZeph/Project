@@ -88,7 +88,7 @@ class _FuelPurchasePageState extends ConsumerState<FuelPurchasePage> {
                 'No Purchase found',
                 style: rowStyles,
               )),
-              minWidth: styles.width * .8,
+              minWidth: 1200,
               headingRowColor: WidgetStateColor.resolveWith(
                   (states) => primaryColor.withOpacity(0.6)),
               headingTextStyle: titleStyles,
