@@ -39,13 +39,17 @@ class RouterItem {
     path: '/new-assignment',
     name: 'newAssignment',
   );
+  static RouterItem editAssignmentRoute = RouterItem(
+    path: '/edit-assignment/:id',
+    name: 'editAssignment',
+  );
 
   static RouterItem newFuelPurchaseRoute = RouterItem(
     path: '/new-fuel-purchase',
     name: 'newFuelPurchase',
   );
   static RouterItem editFuelPurchaseRoute = RouterItem(
-    path:  '/edit-fuel-purchase/:id',
+    path: '/edit-fuel-purchase/:id',
     name: 'editFuelPurchase',
   );
 

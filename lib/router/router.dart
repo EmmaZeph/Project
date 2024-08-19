@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fuel_management/features/admin/dashboard/pages/cars_page.dart';
+import 'package:fuel_management/features/admin/dashboard/pages/forms/assignment/edit_assignment_page.dart';
 import 'package:fuel_management/features/admin/dashboard/pages/forms/assignment/new_assignment.dart';
 import 'package:fuel_management/features/admin/dashboard/pages/forms/fuel/new_fuel_purchase.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +14,7 @@ import '../features/admin/dashboard/pages/forms/car/edit_car_from.dart';
 import '../features/admin/dashboard/pages/forms/car/new_car_form.dart';
 import '../features/admin/dashboard/pages/forms/driver/edit_driver_form.dart';
 import '../features/admin/dashboard/pages/forms/driver/new_driver_forms.dart';
+import '../features/admin/dashboard/pages/forms/fuel/edit_fuel_purchase.dart';
 import '../features/admin/dashboard/pages/fuel_purchace_page.dart';
 import '../features/admin/dashboard/views/dashboard_main.dart';
 import 'router_items.dart';
@@ -121,10 +123,24 @@ class MyRouter {
                     return  const NewAssignment();
                   }),
 
+                  GoRoute(path: RouterItem.editAssignmentRoute.path,
+                  name: RouterItem.editAssignmentRoute.name,
+                   builder: (context, state) {
+                    var id = state.pathParameters['id'];
+                    return  EditAssignmentPage(id: id!);
+                  }),
+
                   GoRoute(path: RouterItem.newFuelPurchaseRoute.path,
                   name: RouterItem.newFuelPurchaseRoute.name,
                    builder: (context, state) {
                     return  const NewFuelPurchase();
+                  }),
+
+                  GoRoute(path: RouterItem.editFuelPurchaseRoute.path,
+                  name: RouterItem.editFuelPurchaseRoute.name,
+                   builder: (context, state) {
+                    var id = state.pathParameters['id'];
+                    return  EditFuelPurchase(id: id!);
                   }),
                 ])
           ]);

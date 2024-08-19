@@ -6,22 +6,28 @@ class FuelModel {
   double quantity;
   double price;
   int dateTime;
-  String boughtByType;
+  String fuelType;
+  String receiptImage;
   String boughtById;
+  String recordedBy;
   String boughtByName;
   String boughtByPhone;
   String boughtByImage;
+  int createdAt;
   FuelModel({
     required this.id,
     required this.carId,
     required this.quantity,
     required this.price,
     required this.dateTime,
-    required this.boughtByType,
+    required this.fuelType,
+    required this.receiptImage,
     required this.boughtById,
+    required this.recordedBy,
     required this.boughtByName,
     required this.boughtByPhone,
     required this.boughtByImage,
+    required this.createdAt,
   });
 
   static FuelModel empty() {
@@ -31,12 +37,14 @@ class FuelModel {
       quantity: 0.0,
       price: 0.0,
       dateTime: 0,
-      boughtByType: '',
+      fuelType: '',
+      receiptImage: '',
       boughtById: '',
       boughtByName: '',
       boughtByPhone: '',
       boughtByImage: '',
-
+      createdAt: 0,
+      recordedBy: '',
     );
   }
 
@@ -46,11 +54,14 @@ class FuelModel {
     double? quantity,
     double? price,
     int? dateTime,
-    String? boughtByType,
+    String? fuelType,
+    String? receiptImage,
     String? boughtById,
+    String? recordedBy,
     String? boughtByName,
     String? boughtByPhone,
     String? boughtByImage,
+    int? createdAt,
   }) {
     return FuelModel(
       id: id ?? this.id,
@@ -58,11 +69,14 @@ class FuelModel {
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
       dateTime: dateTime ?? this.dateTime,
-      boughtByType: boughtByType ?? this.boughtByType,
+      fuelType: fuelType ?? this.fuelType,
+      receiptImage: receiptImage ?? this.receiptImage,
       boughtById: boughtById ?? this.boughtById,
+      recordedBy: recordedBy ?? this.recordedBy,
       boughtByName: boughtByName ?? this.boughtByName,
       boughtByPhone: boughtByPhone ?? this.boughtByPhone,
       boughtByImage: boughtByImage ?? this.boughtByImage,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -74,11 +88,14 @@ class FuelModel {
     result.addAll({'quantity': quantity});
     result.addAll({'price': price});
     result.addAll({'dateTime': dateTime});
-    result.addAll({'boughtByType': boughtByType});
+    result.addAll({'fuelType': fuelType});
+    result.addAll({'receiptImage': receiptImage});
     result.addAll({'boughtById': boughtById});
+    result.addAll({'recordedBy': recordedBy});
     result.addAll({'boughtByName': boughtByName});
     result.addAll({'boughtByPhone': boughtByPhone});
     result.addAll({'boughtByImage': boughtByImage});
+    result.addAll({'createdAt': createdAt});
   
     return result;
   }
@@ -90,21 +107,25 @@ class FuelModel {
       quantity: map['quantity']?.toDouble() ?? 0.0,
       price: map['price']?.toDouble() ?? 0.0,
       dateTime: map['dateTime']?.toInt() ?? 0,
-      boughtByType: map['boughtByType'] ?? '',
+      fuelType: map['fuelType'] ?? '',
+      receiptImage: map['receiptImage'] ?? '',
       boughtById: map['boughtById'] ?? '',
+      recordedBy: map['recordedBy'] ?? '',
       boughtByName: map['boughtByName'] ?? '',
       boughtByPhone: map['boughtByPhone'] ?? '',
       boughtByImage: map['boughtByImage'] ?? '',
+      createdAt: map['createdAt']?.toInt() ?? 0,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory FuelModel.fromJson(String source) => FuelModel.fromMap(json.decode(source));
+  factory FuelModel.fromJson(String source) =>
+      FuelModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'FuelModel(id: $id, carId: $carId, quantity: $quantity, price: $price, dateTime: $dateTime, boughtByType: $boughtByType, boughtById: $boughtById, boughtByName: $boughtByName, boughtByPhone: $boughtByPhone, boughtByImage: $boughtByImage)';
+    return 'FuelModel(id: $id, carId: $carId, quantity: $quantity, price: $price, dateTime: $dateTime, fuelType: $fuelType, receiptImage: $receiptImage, boughtById: $boughtById, recordedBy: $recordedBy, boughtByName: $boughtByName, boughtByPhone: $boughtByPhone, boughtByImage: $boughtByImage, createdAt: $createdAt)';
   }
 
   @override
@@ -117,11 +138,14 @@ class FuelModel {
       other.quantity == quantity &&
       other.price == price &&
       other.dateTime == dateTime &&
-      other.boughtByType == boughtByType &&
+      other.fuelType == fuelType &&
+      other.receiptImage == receiptImage &&
       other.boughtById == boughtById &&
+      other.recordedBy == recordedBy &&
       other.boughtByName == boughtByName &&
       other.boughtByPhone == boughtByPhone &&
-      other.boughtByImage == boughtByImage;
+      other.boughtByImage == boughtByImage &&
+      other.createdAt == createdAt;
   }
 
   @override
@@ -131,10 +155,13 @@ class FuelModel {
       quantity.hashCode ^
       price.hashCode ^
       dateTime.hashCode ^
-      boughtByType.hashCode ^
+      fuelType.hashCode ^
+      receiptImage.hashCode ^
       boughtById.hashCode ^
+      recordedBy.hashCode ^
       boughtByName.hashCode ^
       boughtByPhone.hashCode ^
-      boughtByImage.hashCode;
+      boughtByImage.hashCode ^
+      createdAt.hashCode;
   }
 }

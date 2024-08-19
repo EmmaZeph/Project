@@ -5,7 +5,7 @@ import 'package:fuel_management/core/functions/int_to_date.dart';
 import 'package:fuel_management/features/admin/dashboard/pages/forms/provider/fuel_purchase_provider.dart';
 import 'package:fuel_management/features/admin/dashboard/provider/fuel_purchace_provider.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:image_network/image_network.dart';
 import '../../../../core/views/custom_button.dart';
 import '../../../../core/views/custom_dialog.dart';
 import '../../../../core/views/custom_input.dart';
@@ -145,8 +145,16 @@ class _FuelPurchasePageState extends ConsumerState<FuelPurchasePage> {
                     DataCell(
                       Row(
                         children: [
+                          //view
+                          IconButton(
+                            icon: const Icon(Icons.image),
+                            onPressed: () {
+                              _showImageAlertDialog(
+                                  context, purchase.receiptImage);
+                            },
+                          ),
                           //delete and edit
-                          if (purchase.boughtById == 'admin')
+                          if (purchase.recordedBy == 'admin')
                             IconButton(
                               icon: const Icon(Icons.edit),
                               onPressed: () {
@@ -164,7 +172,7 @@ class _FuelPurchasePageState extends ConsumerState<FuelPurchasePage> {
                                 }
                               },
                             ),
-                          if (purchase.boughtById == 'admin')
+                          if (purchase.recordedBy == 'admin')
                             IconButton(
                               icon: const Icon(Icons.delete),
                               onPressed: () {
@@ -191,6 +199,33 @@ class _FuelPurchasePageState extends ConsumerState<FuelPurchasePage> {
           )
         ],
       ),
+    );
+  }
+
+  void _showImageAlertDialog(BuildContext context, String image) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Purchase Receipt'),
+          contentPadding: EdgeInsets.zero,
+          backgroundColor: Colors.white,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ImageNetwork(image: image, height: 300, width: 450),
+            ],
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the AlertDialog
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

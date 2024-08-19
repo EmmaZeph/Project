@@ -27,20 +27,21 @@ class DashBoardMainPage extends ConsumerWidget {
           appBar: AppBar(
             backgroundColor: primaryColor,
             actions: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-                child: CustomButton(
-                  text: 'Create Assignment',
-                  color: secondaryColor,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-                  radius: 10,
-                  onPressed: () {
-                    //todo create assignment
-                  },
-                ),
-              ),
+              // Padding(
+              //   padding:
+              //       const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+              //   child: CustomButton(
+              //     text: 'Create Assignment',
+              //     color: secondaryColor,
+              //     padding:
+              //         const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+              //     radius: 10,
+              //     onPressed: () {
+              //       //todo create assignment
+              //     },
+              //   ),
+              // ),
+
               const SizedBox(width: 50),
               PopupMenuButton(
                   color: primaryColor,

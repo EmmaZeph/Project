@@ -53,6 +53,7 @@ class AdminLoginProvider extends StateNotifier<AdminLogin> {
       MyRouter(context: context, ref: ref)
           .navigateToRoute(RouterItem.dashboardRoute);
     } else {
+      CustomDialogs.dismiss();
       CustomDialogs.toast(message: 'Invalid admin credentials');
     }
   }
@@ -63,12 +64,11 @@ class AdminLoginProvider extends StateNotifier<AdminLogin> {
     LocalStorage.removeData('isLogged');
     ref.read(adminProvider.notifier).state = false;
     CustomDialogs.dismiss();
-    MyRouter(context: context, ref: ref)
-        .navigateToRoute(RouterItem.loginRoute);
+    MyRouter(context: context, ref: ref).navigateToRoute(RouterItem.loginRoute);
   }
 }
 
-final adminProvider = StateProvider< bool>((ref) {
+final adminProvider = StateProvider<bool>((ref) {
   var isLogged = LocalStorage.getData('isLogged');
   if (isLogged != null) {
     return true;

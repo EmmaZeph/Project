@@ -6,6 +6,8 @@ import 'package:fuel_management/features/driver/pages/driver_home_page.dart';
 import 'package:fuel_management/router/router.dart';
 import 'package:fuel_management/utils/colors.dart';
 import 'core/local_storage.dart';
+import 'features/driver/auth/login_page.dart';
+import 'features/driver/auth/provider/driver_login_provider.dart';
 
 
 void main() async{
@@ -38,7 +40,7 @@ class MyApp extends ConsumerWidget {
            colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
          ),
          builder: FlutterSmartDialog.init(),
-         home: const DriverHomePage(),
+         home:ref.watch(driverProvider)!=null? const DriverHomePage(): const DriverLogin(),
        );
      }
 

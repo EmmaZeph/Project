@@ -8,3 +8,8 @@ String intToDateTime(int date,{bool withTime = false}) {
 String intToDate(int date) {
   return DateFormat('EEE,MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(date));
 }
+
+
+String intToTime(int date) {
+  return DateFormat('hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(date));
+}

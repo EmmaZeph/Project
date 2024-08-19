@@ -1,33 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:fuel_management/core/views/custom_input.dart';
-import 'package:fuel_management/features/admin/dashboard/data/driver_model.dart';
+import 'package:fuel_management/features/admin/dashboard/data/car_model.dart';
 import 'package:fuel_management/features/admin/dashboard/pages/forms/provider/new_assignment_provider.dart';
-import 'package:fuel_management/features/admin/dashboard/provider/drivers_provider.dart';
-import 'package:fuel_management/utils/colors.dart';
+import 'package:fuel_management/features/admin/dashboard/provider/assignment_provider.dart';
+import 'package:fuel_management/features/admin/dashboard/provider/cars_provider.dart';
 import 'package:image_network/image_network.dart';
+
 import '../../../../../../core/functions/int_to_date.dart';
 import '../../../../../../core/views/custom_button.dart';
+import '../../../../../../core/views/custom_input.dart';
 import '../../../../../../router/router.dart';
 import '../../../../../../router/router_items.dart';
+import '../../../../../../utils/colors.dart';
 import '../../../../../../utils/styles.dart';
-import '../../../data/car_model.dart';
-import '../../../provider/cars_provider.dart';
+import '../../../data/driver_model.dart';
+import '../../../provider/drivers_provider.dart';
 
-class NewAssignment extends ConsumerStatefulWidget {
-  const NewAssignment({super.key});
+class EditAssignmentPage extends ConsumerStatefulWidget {
+  const EditAssignmentPage({super.key, required this.id});
+  final String id;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _NewAssignmentState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _EditAssignmentPageState();
 }
 
-class _NewAssignmentState extends ConsumerState<NewAssignment> {
+class _EditAssignmentPageState extends ConsumerState<EditAssignmentPage> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     var styles = Styles(context);
-    var notifier = ref.read(newAssignmentProvider.notifier);
+    var notifier = ref.read(editAssignmentProvider.notifier);
+    var assignment = ref.watch(assignmentsProvider).items
+        .firstWhere((element) => element.id == widget.id);
+  //check if widget is done building
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifier.setAssignment(assignment);
+    });
+    assignment = ref.watch(editAssignmentProvider);
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.all(22),
@@ -61,7 +72,7 @@ class _NewAssignmentState extends ConsumerState<NewAssignment> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'New Assignment'.toUpperCase(),
+                        'Update Assignment'.toUpperCase(),
                         style: styles.title(fontSize: 35, color: Colors.black),
                       ),
                     ],
@@ -106,7 +117,7 @@ class _NewAssignmentState extends ConsumerState<NewAssignment> {
                             //wait for build to complete
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               var driver = DriverModel.fromMap(
-                                  ref.watch(newAssignmentProvider).driver);
+                                  ref.watch(editAssignmentProvider).driver);
                               controller.text =
                                   driver.name.isEmpty ? '' : driver.name;
                               //remove focus
@@ -172,7 +183,7 @@ class _NewAssignmentState extends ConsumerState<NewAssignment> {
                             //wait for build to complete
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               controller.text =
-                                  ref.watch(newAssignmentProvider).carId;
+                                  ref.watch(editAssignmentProvider).carId;
                               //remove focus
                             });
                             return CustomTextFields(
@@ -215,10 +226,10 @@ class _NewAssignmentState extends ConsumerState<NewAssignment> {
                           label: 'Date of Pickup',
                           controller: TextEditingController(
                               text:
-                                  ref.watch(newAssignmentProvider).pickupDate !=
+                                  ref.watch(editAssignmentProvider).pickupDate !=
                                           0
                                       ? intToDate(ref
-                                          .watch(newAssignmentProvider)
+                                          .watch(editAssignmentProvider)
                                           .pickupDate)
                                       : ''),
                           validator: (value) {
@@ -256,10 +267,10 @@ class _NewAssignmentState extends ConsumerState<NewAssignment> {
                           label: 'Time of Pickup',
                           controller: TextEditingController(
                               text:
-                                  ref.watch(newAssignmentProvider).pickupTime !=
+                                  ref.watch(editAssignmentProvider).pickupTime !=
                                           0
                                       ? intToTime(ref
-                                          .watch(newAssignmentProvider)
+                                          .watch(editAssignmentProvider)
                                           .pickupTime)
                                       : ''),
                           validator: (value) {
@@ -300,6 +311,7 @@ class _NewAssignmentState extends ConsumerState<NewAssignment> {
                       Expanded(
                         child: CustomTextFields(
                           hintText: 'Trip Route',
+                          initialValue: assignment.route,
                           label: 'Trip Route',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -321,6 +333,7 @@ class _NewAssignmentState extends ConsumerState<NewAssignment> {
                           hintText: 'Fuel Level',
                           label: 'Fuel level (Liters)',
                           keyboardType: TextInputType.number,
+                          initialValue: assignment.pickupFuelLevel.toString(),
                           isDigitOnly: true,
                           max: 3,
                           validator: (value) {
@@ -342,6 +355,7 @@ class _NewAssignmentState extends ConsumerState<NewAssignment> {
                   CustomTextFields(
                     hintText: 'Trip description',
                     label: 'Description',
+                    initialValue: assignment.description,
                     maxLines: 5,
                     onSaved: (value) {
                       notifier.setDescription(value);
@@ -351,12 +365,12 @@ class _NewAssignmentState extends ConsumerState<NewAssignment> {
                     height: 25,
                   ),
                   CustomButton(
-                    text: 'Save Assignment',
+                    text: 'Update Assignment',
                     radius: 10,
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
-                        notifier.saveAssignment(
+                        notifier.updateAssignments(
                             context: context, form: formKey);
                       }
                     },
@@ -369,4 +383,5 @@ class _NewAssignmentState extends ConsumerState<NewAssignment> {
       ),
     );
   }
+
 }

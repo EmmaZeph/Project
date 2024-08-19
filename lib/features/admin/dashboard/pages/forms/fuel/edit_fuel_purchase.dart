@@ -3,10 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fuel_management/features/admin/dashboard/data/car_model.dart';
 import 'package:fuel_management/features/admin/dashboard/data/driver_model.dart';
-import 'package:fuel_management/features/admin/dashboard/provider/cars_provider.dart';
-import 'package:fuel_management/features/admin/dashboard/provider/drivers_provider.dart';
+import 'package:fuel_management/features/admin/dashboard/pages/forms/provider/fuel_purchase_provider.dart';
+import 'package:fuel_management/features/admin/dashboard/provider/fuel_purchace_provider.dart';
 import 'package:image_network/image_network.dart';
 import 'package:image_picker/image_picker.dart';
+
 import '../../../../../../core/constant.dart';
 import '../../../../../../core/functions/int_to_date.dart';
 import '../../../../../../core/views/custom_button.dart';
@@ -17,24 +18,44 @@ import '../../../../../../router/router.dart';
 import '../../../../../../router/router_items.dart';
 import '../../../../../../utils/colors.dart';
 import '../../../../../../utils/styles.dart';
-import '../provider/fuel_purchase_provider.dart';
+import '../../../provider/cars_provider.dart';
+import '../../../provider/drivers_provider.dart';
 
-class NewFuelPurchase extends ConsumerStatefulWidget {
-  const NewFuelPurchase({super.key});
+class EditFuelPurchase extends ConsumerStatefulWidget {
+  const EditFuelPurchase({super.key, required this.id});
+  final String id;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _NewFuelPurchaseState();
+      _EditFuelPurchaseState();
 }
 
-class _NewFuelPurchaseState extends ConsumerState<NewFuelPurchase> {
+class _EditFuelPurchaseState extends ConsumerState<EditFuelPurchase> {
   final formKey = GlobalKey<FormState>();
 
   final receiptController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var styles = Styles(context);
-    var notifier = ref.read(newPurchaseProvider.notifier);
+    var notifier = ref.read(editPurchaseProvider.notifier);
+    var purchase = ref
+        .watch(fuelProvider)
+        .items
+        .where((element) => element.id == widget.id)
+        .toList()
+        .firstOrNull;
+        print(purchase);
+    //check if widget is done building
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (purchase != null) {
+        notifier.setPurchase(purchase);
+        setState(() {
+          
+        });
+      }
+      receiptController.text = purchase?.receiptImage ?? '';
+    });
+    purchase = ref.watch(editPurchaseProvider);
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.all(22),
@@ -68,7 +89,7 @@ class _NewFuelPurchaseState extends ConsumerState<NewFuelPurchase> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'New Purchase'.toUpperCase(),
+                        'Update Purchase'.toUpperCase(),
                         style: styles.title(fontSize: 35, color: Colors.black),
                       ),
                     ],
@@ -98,9 +119,10 @@ class _NewFuelPurchaseState extends ConsumerState<NewFuelPurchase> {
                           hintText: 'Date of Purchase',
                           label: 'Date of Purchase',
                           controller: TextEditingController(
-                              text: ref.watch(newPurchaseProvider).dateTime != 0
+                              text: ref.watch(editPurchaseProvider).dateTime !=
+                                      0
                                   ? intToDate(
-                                      ref.watch(newPurchaseProvider).dateTime)
+                                      ref.watch(editPurchaseProvider).dateTime)
                                   : ''),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -135,6 +157,7 @@ class _NewFuelPurchaseState extends ConsumerState<NewFuelPurchase> {
                           label: 'Quantity (Liters)',
                           //isCapitalized: true,
                           isDigitOnly: true,
+                          initialValue: ref.watch(editPurchaseProvider).quantity.toString(),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Quantity is required';
@@ -153,6 +176,7 @@ class _NewFuelPurchaseState extends ConsumerState<NewFuelPurchase> {
                         child: CustomTextFields(
                           hintText: 'Price',
                           label: 'Price (GHS)',
+                          initialValue: purchase?.price.toString(),
                           keyboardType: TextInputType.number,
                           isDigitOnly: true,
                           validator: (value) {
@@ -192,7 +216,7 @@ class _NewFuelPurchaseState extends ConsumerState<NewFuelPurchase> {
                             //wait for build to complete
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               controller.text =
-                                  ref.watch(newPurchaseProvider).boughtByName;
+                                  ref.watch(editPurchaseProvider).boughtByName;
                               //remove focus
                             });
                             return CustomTextFields(
@@ -255,7 +279,7 @@ class _NewFuelPurchaseState extends ConsumerState<NewFuelPurchase> {
                             //wait for build to complete
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               controller.text =
-                                  ref.watch(newPurchaseProvider).carId;
+                                  ref.watch(editPurchaseProvider).carId;
                               //remove focus
                             });
                             return CustomTextFields(
@@ -295,6 +319,9 @@ class _NewFuelPurchaseState extends ConsumerState<NewFuelPurchase> {
                           child: CustomDropDown(
                               label: 'Fuel Type',
                               hintText: 'Fuel Type',
+                              value: purchase!.fuelType.isEmpty
+                                  ? null
+                                  : purchase.fuelType,
                               validator: (fuel) {
                                 if (fuel == null || fuel.isEmpty) {
                                   return 'Fuel Type is required';
@@ -338,12 +365,15 @@ class _NewFuelPurchaseState extends ConsumerState<NewFuelPurchase> {
                     height: 25,
                   ),
                   CustomButton(
-                    text: 'Save Purchase',
+                    text: 'Update Purchase',
                     radius: 10,
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
-                        if (ref.watch(newPurchaseProvider).boughtById.isEmpty) {
+                        if (ref
+                            .watch(editPurchaseProvider)
+                            .boughtById
+                            .isEmpty) {
                           CustomDialogs.toast(
                               message: 'Please select driver',
                               type: DialogType.error);
@@ -355,13 +385,13 @@ class _NewFuelPurchaseState extends ConsumerState<NewFuelPurchase> {
                               type: DialogType.error);
                           return;
                         }
-                        if (ref.watch(newPurchaseProvider).carId.isEmpty) {
+                        if (ref.watch(editPurchaseProvider).carId.isEmpty) {
                           CustomDialogs.toast(
                               message: 'Please select Car',
                               type: DialogType.error);
                           return;
                         }
-                        notifier.savePurchase(ref: ref, form: formKey);
+                        notifier.updatePurchase(ref: ref, context: context);
                       }
                     },
                   )
