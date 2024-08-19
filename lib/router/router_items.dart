@@ -35,6 +35,20 @@ class RouterItem {
   static RouterItem editDriverRoute =
       RouterItem(path: '/edit-driver/:id', name: 'editDriver');
 
+  static RouterItem newAssignmentRoute = RouterItem(
+    path: '/new-assignment',
+    name: 'newAssignment',
+  );
+
+  static RouterItem newFuelPurchaseRoute = RouterItem(
+    path: '/new-fuel-purchase',
+    name: 'newFuelPurchase',
+  );
+  static RouterItem editFuelPurchaseRoute = RouterItem(
+    path:  '/edit-fuel-purchase/:id',
+    name: 'editFuelPurchase',
+  );
+
   static List<RouterItem> allRoutes = [
     loginRoute,
     dashboardRoute,

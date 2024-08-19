@@ -6,5 +6,5 @@ String intToDateTime(int date,{bool withTime = false}) {
 }
 
 String intToDate(int date) {
-  return DateFormat('EEE,MMM dd').format(DateTime.fromMillisecondsSinceEpoch(date));
+  return DateFormat('EEE,MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(date));
 }

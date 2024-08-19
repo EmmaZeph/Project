@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 
 class FuelModel {
   String id;
@@ -7,14 +6,22 @@ class FuelModel {
   double quantity;
   double price;
   int dateTime;
-  Map<String,dynamic> boughtBy;
+  String boughtByType;
+  String boughtById;
+  String boughtByName;
+  String boughtByPhone;
+  String boughtByImage;
   FuelModel({
     required this.id,
     required this.carId,
     required this.quantity,
     required this.price,
     required this.dateTime,
-     this.boughtBy = const {},
+    required this.boughtByType,
+    required this.boughtById,
+    required this.boughtByName,
+    required this.boughtByPhone,
+    required this.boughtByImage,
   });
 
   static FuelModel empty() {
@@ -24,7 +31,12 @@ class FuelModel {
       quantity: 0.0,
       price: 0.0,
       dateTime: 0,
-      boughtBy: {},
+      boughtByType: '',
+      boughtById: '',
+      boughtByName: '',
+      boughtByPhone: '',
+      boughtByImage: '',
+
     );
   }
 
@@ -34,7 +46,11 @@ class FuelModel {
     double? quantity,
     double? price,
     int? dateTime,
-    Map<String,dynamic>? boughtBy,
+    String? boughtByType,
+    String? boughtById,
+    String? boughtByName,
+    String? boughtByPhone,
+    String? boughtByImage,
   }) {
     return FuelModel(
       id: id ?? this.id,
@@ -42,7 +58,11 @@ class FuelModel {
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
       dateTime: dateTime ?? this.dateTime,
-      boughtBy: boughtBy ?? this.boughtBy,
+      boughtByType: boughtByType ?? this.boughtByType,
+      boughtById: boughtById ?? this.boughtById,
+      boughtByName: boughtByName ?? this.boughtByName,
+      boughtByPhone: boughtByPhone ?? this.boughtByPhone,
+      boughtByImage: boughtByImage ?? this.boughtByImage,
     );
   }
 
@@ -54,7 +74,11 @@ class FuelModel {
     result.addAll({'quantity': quantity});
     result.addAll({'price': price});
     result.addAll({'dateTime': dateTime});
-    result.addAll({'boughtBy': boughtBy});
+    result.addAll({'boughtByType': boughtByType});
+    result.addAll({'boughtById': boughtById});
+    result.addAll({'boughtByName': boughtByName});
+    result.addAll({'boughtByPhone': boughtByPhone});
+    result.addAll({'boughtByImage': boughtByImage});
   
     return result;
   }
@@ -66,7 +90,11 @@ class FuelModel {
       quantity: map['quantity']?.toDouble() ?? 0.0,
       price: map['price']?.toDouble() ?? 0.0,
       dateTime: map['dateTime']?.toInt() ?? 0,
-      boughtBy: Map<String,dynamic>.from(map['boughtBy']),
+      boughtByType: map['boughtByType'] ?? '',
+      boughtById: map['boughtById'] ?? '',
+      boughtByName: map['boughtByName'] ?? '',
+      boughtByPhone: map['boughtByPhone'] ?? '',
+      boughtByImage: map['boughtByImage'] ?? '',
     );
   }
 
@@ -76,7 +104,7 @@ class FuelModel {
 
   @override
   String toString() {
-    return 'FuelModel(id: $id, carId: $carId, quantity: $quantity, price: $price, dateTime: $dateTime, boughtBy: $boughtBy)';
+    return 'FuelModel(id: $id, carId: $carId, quantity: $quantity, price: $price, dateTime: $dateTime, boughtByType: $boughtByType, boughtById: $boughtById, boughtByName: $boughtByName, boughtByPhone: $boughtByPhone, boughtByImage: $boughtByImage)';
   }
 
   @override
@@ -89,7 +117,11 @@ class FuelModel {
       other.quantity == quantity &&
       other.price == price &&
       other.dateTime == dateTime &&
-      mapEquals(other.boughtBy, boughtBy);
+      other.boughtByType == boughtByType &&
+      other.boughtById == boughtById &&
+      other.boughtByName == boughtByName &&
+      other.boughtByPhone == boughtByPhone &&
+      other.boughtByImage == boughtByImage;
   }
 
   @override
@@ -99,6 +131,10 @@ class FuelModel {
       quantity.hashCode ^
       price.hashCode ^
       dateTime.hashCode ^
-      boughtBy.hashCode;
+      boughtByType.hashCode ^
+      boughtById.hashCode ^
+      boughtByName.hashCode ^
+      boughtByPhone.hashCode ^
+      boughtByImage.hashCode;
   }
 }

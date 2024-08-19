@@ -1,37 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fuel_management/core/constant.dart';
-import 'package:fuel_management/core/views/custom_drop_down.dart';
-import 'package:fuel_management/core/views/custom_input.dart';
-import 'package:fuel_management/features/admin/dashboard/provider/cars_provider.dart';
-import 'package:fuel_management/router/router.dart';
 
-import '../../../../../../core/views/custom_button.dart';
+import '../../../../../../core/views/custom_input.dart';
+import '../../../../../../router/router.dart';
 import '../../../../../../router/router_items.dart';
 import '../../../../../../utils/colors.dart';
 import '../../../../../../utils/styles.dart';
-import '../provider/car_new_edit_provider.dart';
+import '../provider/fuel_purchase_provider.dart';
 
-class EditCarFrom extends ConsumerStatefulWidget {
-  const EditCarFrom({super.key, required this.id});
-  final String id;
+class NewFuelPurchase extends ConsumerStatefulWidget {
+  const NewFuelPurchase({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _EditCarFromState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _NewFuelPurchaseState();
 }
 
-class _EditCarFromState extends ConsumerState<EditCarFrom> {
-  final formKey = GlobalKey<FormState>();
+class _NewFuelPurchaseState extends ConsumerState<NewFuelPurchase> {
+
+ final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     var styles = Styles(context);
-    var notifier = ref.read(editCarProvider.notifier);
-    var car = ref.watch(carsProvider).items.firstWhere((element) => element.id == widget.id);
-    //check if widget is done building
-     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      notifier.setCar(car);
-    });
-     car = ref.watch(editCarProvider);
+    var notifier = ref.read(newPurchaseProvider.notifier);
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.all(22),
@@ -45,7 +35,7 @@ class _EditCarFromState extends ConsumerState<EditCarFrom> {
                 InkWell(
                   onTap: () {
                     MyRouter(context: context, ref: ref)
-                        .navigateToRoute(RouterItem.carsRoute);
+                        .navigateToRoute(RouterItem.fuelPurchaseRoute);
                   },
                   child: Row(
                     children: [
@@ -65,7 +55,7 @@ class _EditCarFromState extends ConsumerState<EditCarFrom> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Update Car Info'.toUpperCase(),
+                        'New Purchase'.toUpperCase(),
                         style: styles.title(fontSize: 35, color: Colors.black),
                       ),
                     ],
@@ -95,7 +85,6 @@ class _EditCarFromState extends ConsumerState<EditCarFrom> {
                           hintText: 'Car Registration Number',
                           label: 'Car Registration Number',
                           isCapitalized: true,
-                          initialValue: car.registrationNumber,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Car Registration Number is required';
@@ -113,7 +102,6 @@ class _EditCarFromState extends ConsumerState<EditCarFrom> {
                       Expanded(
                         child: CustomDropDown(
                           label: 'Car Type',
-                          value: car.type,
                           items: carTypes
                               .map((e) =>
                                   DropdownMenuItem(value: e, child: Text(e)))
@@ -139,7 +127,6 @@ class _EditCarFromState extends ConsumerState<EditCarFrom> {
                     children: [
                       Expanded(
                         child: CustomDropDown(
-                          value: car.brand,
                           items: carBrandsInGhana
                               .map((brans) => DropdownMenuItem(
                                   value: brans, child: Text(brans)))
@@ -164,7 +151,6 @@ class _EditCarFromState extends ConsumerState<EditCarFrom> {
                         child: CustomTextFields(
                           hintText: 'Car Model',
                           label: 'Car Model',
-                          initialValue: car.model,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Car Model is required';
@@ -187,7 +173,6 @@ class _EditCarFromState extends ConsumerState<EditCarFrom> {
                           child: CustomDropDown(
                               label: 'Fuel Type',
                               hintText: 'Fuel Type',
-                              value: car.fuelType,
                               validator: (fuel) {
                                 if (fuel == null || fuel.isEmpty) {
                                   return 'Fuel Type is required';
@@ -210,7 +195,6 @@ class _EditCarFromState extends ConsumerState<EditCarFrom> {
                           hintText: 'Fuel Capacity',
                           label: 'Fuel Capacity (Liters)',
                           keyboardType: TextInputType.number,
-                          initialValue: car.fuelCapacity.toString(),
                           isDigitOnly: true,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -230,7 +214,6 @@ class _EditCarFromState extends ConsumerState<EditCarFrom> {
                       Expanded(
                         child: CustomTextFields(
                           hintText: 'Seat Capacity',
-                          initialValue: car.seatCapacity.toString(),
                           label: 'Seat Capacity',
                           keyboardType: TextInputType.number,
                           isDigitOnly: true,
@@ -254,7 +237,6 @@ class _EditCarFromState extends ConsumerState<EditCarFrom> {
                     hintText: 'Description',
                     label: 'Give car description',
                     maxLines: 5,
-                    initialValue: car.description,
                     onSaved: (value) {
                       notifier.setDescription(value);
                     },
@@ -263,12 +245,12 @@ class _EditCarFromState extends ConsumerState<EditCarFrom> {
                     height: 25,
                   ),
                   CustomButton(
-                    text: 'Update Car',
+                    text: 'Save Car',
                     radius: 10,
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
-                        notifier.updateCar(context: context, form: formKey);
+                        notifier.saveCar(context: context, form: formKey);
                       }
                     },
                   )
@@ -280,4 +262,5 @@ class _EditCarFromState extends ConsumerState<EditCarFrom> {
       ),
     );
   }
+}
 }
